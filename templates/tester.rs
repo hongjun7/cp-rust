@@ -37,7 +37,7 @@ pub(crate) fn run_tests() -> bool {
     let yellow = "\x1B[33m";
     let def = "\x1B[0m";
     let time_limit = std::time::Duration::from_millis($TIME_LIMIT);
-    let mut paths = std::fs::read_dir("./$TASK/tests/")
+    let mut paths = std::fs::read_dir("./tests/")
         .unwrap()
         .map(|res| res.unwrap())
         .collect::<Vec<_>>();
