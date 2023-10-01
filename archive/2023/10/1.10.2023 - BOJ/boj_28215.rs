@@ -5,38 +5,35 @@ use algo_lib::io::output::Output;
 
 type PreCalc = ();
 
+fn get_dist(p: &(i32, i32), q: &(i32, i32)) -> i32 {
+    i32::abs(p.0 - q.0) + i32::abs(p.1 - q.1)
+}
+
 fn solve(input: &mut Input, out: &mut Output, _test_case: usize, _data: &PreCalc) {
     let n = input.read_int() as usize;
     let k = input.read_int() as usize;
-    let mut p:Vec<(i32, i32)> = Vec::new();
-    for i in 0..n {
-        let x = input.read_int();
-        let y = input.read_int();
-        p.push((x, y));
-    }
-    let get_dist:fn((i32, i32), (i32, i32)) -> i32 = |p, q| {
-        i32::abs(p.0 - q.0) + i32::abs(p.1 - q.1)
-    };
+    let p:Vec<(i32, i32)> = input.read_int_pair_vec(n);
+
     let mut ans:i32 = std::i32::MAX;
     match k {
         1 => {
             ans = p.iter().map(|pi| {
-                p.iter().map(|h| get_dist(*pi, *h)).max().unwrap_or(0)
-            }).min().unwrap_or(std::i32::MAX);
+                p.iter().map(|h| get_dist(pi, h)).max().unwrap()
+            }).min().unwrap();
         },
         2 => {
             ans = (0..n).map(|i| { let pi = &p[i];
                 (i..n).map(|j| { let pj = &p[j];
-                    p.iter().map(|h| get_dist(*pi, *h).min(get_dist(*pj, *h))).max().unwrap_or(0)
-                }).min().unwrap_or(std::i32::MAX)
+                    p.iter().map(|h| get_dist(pi, h).min(get_dist(pj, h))).max().unwrap()
+                }).min().unwrap()
             }).min().unwrap();
         },
         3 => {
             ans = (0..n).map(|i| { let pi = &p[i];
                 (i..n).map(|j| { let pj = &p[j];
                     (j..n).map(|k| { let pk = &p[k];
-                        p.iter().map(|h| get_dist(*pi, *h).min(get_dist(*pj, *h)).min(get_dist(*pk, *h))).max().unwrap_or(0)
-                    }).min().unwrap_or(std::i32::MAX)
+                        p.iter().map(|h| get_dist(pi, h).min(get_dist(pj, h)).min(get_dist(pk, h))).max().unwrap()
+                    }).min().unwrap()
                 }).min().unwrap()
             }).min().unwrap();
         },
